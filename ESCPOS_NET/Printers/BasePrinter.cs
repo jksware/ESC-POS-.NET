@@ -111,11 +111,13 @@ namespace ESCPOS_NET
                     // Thrown if the printer times out the socket connection
                     // default is 90 seconds
                     //Logging.Logger?.LogDebug("[{Function}]:[{PrinterName}] Swallowing IOException... sometimes happens with network printers. Should get reconnected automatically.");
+                    throw;
                 }
                 catch
                 {
                     // Swallow the exception
                     //Logging.Logger?.LogDebug("[{Function}]:[{PrinterName}] Swallowing generic read exception... sometimes happens with serial port printers.");
+                    throw;
                 }
             }
         }
@@ -146,11 +148,15 @@ namespace ESCPOS_NET
                         DataAvailable();
                     }
                 }
-
+                catch (OperationCanceledException)
+                {
+                    // just swallow this exception
+                }
                 catch
                 {
                     // Swallow the exception
                     //Logging.Logger?.LogDebug("[{Function}]:[{PrinterName}] Swallowing generic read exception... sometimes happens with serial port printers.", $"{this}.{MethodBase.GetCurrentMethod().Name}", PrinterName);
+                    throw;
                 }
             }
         }
@@ -197,6 +203,7 @@ namespace ESCPOS_NET
                     if (!IsConnected)
                     {
                         Logging.Logger?.LogError(e, "[{Function}]:[{PrinterName}] Unrecoverable connectivity error writing to printer.", $"{this}.{MethodBase.GetCurrentMethod().Name}", PrinterName);
+                        throw;
                     }
                     Writer.Write(bytes, bytePointer, count);
                 }
@@ -229,6 +236,7 @@ namespace ESCPOS_NET
             catch (Exception ex)
             {
                 Logging.Logger?.LogError(ex, "[{Function}]:[{PrinterName}] Flush threw exception.", $"{this}.{MethodBase.GetCurrentMethod().Name}", PrinterName);
+                throw;
             }
         }
 
@@ -319,6 +327,7 @@ namespace ESCPOS_NET
                 catch (Exception e)
                 {
                     Logging.Logger?.LogDebug(e, "[{Function}]:[{PrinterName}] Dispose Issue during cancellation token cancellation call.", $"{this}.{MethodBase.GetCurrentMethod().Name}", PrinterName);
+                    throw;
                 }
                 try
                 {
@@ -327,6 +336,7 @@ namespace ESCPOS_NET
                 catch (Exception e)
                 {
                     Logging.Logger?.LogDebug(e, "[{Function}]:[{PrinterName}] Dispose Issue closing reader.", $"{this}.{MethodBase.GetCurrentMethod().Name}", PrinterName);
+                    throw;
                 }
                 try
                 {
@@ -335,6 +345,7 @@ namespace ESCPOS_NET
                 catch (Exception e)
                 {
                     Logging.Logger?.LogDebug(e, "[{Function}]:[{PrinterName}] Dispose Issue disposing reader.", $"{this}.{MethodBase.GetCurrentMethod().Name}", PrinterName);
+                    throw;
                 }
                 try
                 {
@@ -343,6 +354,7 @@ namespace ESCPOS_NET
                 catch (Exception e)
                 {
                     Logging.Logger?.LogDebug(e, "[{Function}]:[{PrinterName}] Dispose Issue closing writer.", $"{this}.{MethodBase.GetCurrentMethod().Name}", PrinterName);
+                    throw;
                 }
                 try
                 {
@@ -351,6 +363,7 @@ namespace ESCPOS_NET
                 catch (Exception e)
                 {
                     Logging.Logger?.LogDebug(e, "[{Function}]:[{PrinterName}] Dispose Issue disposing writer.", $"{this}.{MethodBase.GetCurrentMethod().Name}", PrinterName);
+                    throw;
                 }
                 try
                 {
@@ -359,6 +372,7 @@ namespace ESCPOS_NET
                 catch (Exception e)
                 {
                     Logging.Logger?.LogDebug(e, "[{Function}]:[{PrinterName}] Dispose Issue during overridable dispose.", $"{this}.{MethodBase.GetCurrentMethod().Name}", PrinterName);
+                    throw;
                 }
             }
 
