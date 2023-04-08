@@ -17,6 +17,18 @@ namespace ESCPOS_NET
             Reader = new BinaryReader(_serialPort.BaseStream);
         }
 
+        public void Flush()
+        {
+            Writer.Flush();
+            _serialPort?.BaseStream.Flush();
+        }
+
+        public async Task FlushAsync()
+        {
+            Writer.Flush();
+            await _serialPort?.BaseStream.FlushAsync();
+        }
+
         protected override void OverridableDispose()
         {
             _serialPort?.Close();
